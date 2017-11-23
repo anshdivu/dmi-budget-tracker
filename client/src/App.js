@@ -26,7 +26,11 @@ class App extends Component {
           </h1>
         </header>
         <p className="App-intro">
-          To get started, edit <code>client/src/App.js</code> and save to
+          Getting Started:<br />
+          * To view another user's name, update query param{" "}
+          <code>?user=id</code>
+          <br />
+          * To update code, edit <code>client/src/App.js</code> and save to
           reload.
         </p>
       </div>
