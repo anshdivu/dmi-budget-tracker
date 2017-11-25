@@ -7,6 +7,7 @@ if (process.env.NODE_ENV === "production") {
   router.use(express.static(buildFolder));
 
   router.get("/", function(req, res) {
+    console.warn("........ I am here ........", req);
     res.sendFile(path.join(buildFolder, "index.html"));
   });
 }
