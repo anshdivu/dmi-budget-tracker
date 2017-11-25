@@ -1,5 +1,5 @@
 const Sequelize = require("sequelize");
-const sequelize = require("../lib/dbConnection");
+const sequelize = require("../lib/sequelizer");
 
 module.exports = sequelize.define("person", {
   id: {
