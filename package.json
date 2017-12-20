@@ -1,36 +1,20 @@
 {
   "name": "dmi-budget-tracker",
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
-    "dev": "nf start --procfile Procfile.dev --env .env.dev --port 3000",
-    "postinstall": "cd client && yarn install",
-    "heroku-postbuild": "cd client && yarn build",
-    "precommit": "lint-staged"
+    "start": "razzle start",
+    "build": "razzle build",
+    "test": "razzle test --env=jsdom",
+    "start:prod": "NODE_ENV=production node build/server.js"
   },
   "dependencies": {
-    "apollo-server-express": "^1.2.0",
-    "body-parser": "~1.18.2",
-    "cookie-parser": "~1.4.3",
-    "create-react-app": "^1.4.3",
-    "debug": "~2.6.9",
-    "express": "~4.15.5",
-    "global": "^4.3.2",
-    "graphql": "^0.11.7",
-    "graphql-tools": "^2.8.0",
-    "morgan": "~1.9.0",
-    "pg": "^7.4.0",
-    "pg-hstore": "^2.3.2",
-    "sequelize": "^4.22.15",
-    "serve-favicon": "~2.4.5"
-  },
-  "devDependencies": {
-    "foreman": "^2.0.0",
-    "husky": "^0.14.3",
-    "lint-staged": "^5.0.0"
-  },
-  "lint-staged": {
-    "*.{js,json,css}": ["prettier --write", "git add"]
+    "express": "^4.16.2",
+    "raf": "^3.4.0",
+    "razzle": "^0.8.7",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-router-dom": "^4.2.2"
   }
 }
