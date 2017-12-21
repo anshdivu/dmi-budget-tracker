@@ -1,6 +1,7 @@
-const Sequelize = require("sequelize");
-var sequelize = new Sequelize(process.env.DATABASE_URL, {
-  dialect: "postgres",
+import Sequelize from 'sequelize';
+
+const sequelize = new Sequelize(process.env.RAZZLE_DATABASE_URL, {
+  dialect: 'postgres',
   dialectOptions: {
     ssl: true // heroku requires that postgres connection always uses `ssl`
   },
@@ -11,4 +12,4 @@ var sequelize = new Sequelize(process.env.DATABASE_URL, {
   }
 });
 
-module.exports = sequelize;
+export default sequelize;
