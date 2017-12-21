@@ -1,4 +1,4 @@
-import Person from '../server/models/person';
+import Person from './models/person';
 import { makeExecutableSchema } from 'graphql-tools';
 
 const typeDefs = `
