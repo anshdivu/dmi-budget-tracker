@@ -1,7 +1,7 @@
-const Sequelize = require('sequelize');
-const sequelize = require('../lib/sequelizer');
+import Sequelize from 'sequelize';
+import sequelize from '../../config/sequelize';
 
-module.exports = sequelize.define('person', {
+export default sequelize.define('person', {
   id: {
     type: Sequelize.INTEGER,
     primaryKey: true
