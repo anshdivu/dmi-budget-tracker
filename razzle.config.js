@@ -2,6 +2,9 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   modify: (config, { target, dev }, webpack) => {
+    console.log(
+      `**************************${target} - ${dev}*****************************`
+    );
     if (target === 'web') {
       const extractSass = new ExtractTextPlugin({
         filename: '[name].[contenthash].css',

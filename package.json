@@ -4,10 +4,11 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "razzle build",
     "precommit": "lint-staged",
-    "start": "razzle start",
-    "start:prod": "NODE_ENV=production node build/server.js",
+    "start:dev": "razzle start",
+    "build": "razzle build",
+    "heroku-postbuild": "echo PORT=\"$PORT\" && razzle build",
+    "start": "NODE_ENV=production node build/server.js",
     "test": "razzle test --env=jsdom"
   },
   "dependencies": {

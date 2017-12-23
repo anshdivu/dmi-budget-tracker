@@ -4,13 +4,16 @@ import http from 'http';
 const server = http.createServer(app);
 
 let currentApp = app;
-
-server.listen(process.env.PORT || 3000, (error) => {
+let port = process.env.PORT || 3005;
+console.log(
+  `********************* PORT = ${port} ******************************`
+);
+server.listen(port, (error, obj) => {
   if (error) {
-    console.log(error)
+    console.log(error);
   }
-  
-  console.log('🚀 started')
+
+  console.log('🚀 started', JSON.stringify(obj));
 });
 
 if (module.hot) {
