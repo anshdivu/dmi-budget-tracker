@@ -8,35 +8,36 @@
 SELECT 
   project_id,
   project_name, 
-  P.BASE_BUDGET,
   P.START_DATE,
   P.END_DATE,
+  P.BASE_BUDGET,
   ROUND(SUM(ACTUAL_HOURS)::numeric, 2) as TOTAL_ACTUAL_HOURS, 
-  ROUND(SUM(ACTUAL_REVENUE)::numeric, 2) AS TOTAL_ACTUAL_REVENUE,
+  ROUND(SUM(ACTUAL_REVENUE)::numeric, 2) AS "TOTAL_ACTUAL_REVENUE (EAC)",
   ROUND(SUM(case when type = 'Billed' then ACTUAL_REVENUE else 0 end)::numeric, 2) AS "Actual Spend to Date",
+  ROUND((SUM(ACTUAL_REVENUE) - P.BASE_BUDGET)::numeric, 2) AS ACTUAL_REVENUE_DIFFERENCE,
+  ROUND((SUM(ACTUAL_REVENUE) / P.BASE_BUDGET*100)::numeric, 2) AS ACTUAL_PCT_DIFFERENCE,
   ROUND(SUM(FORECAST_HOURS)::numeric, 2) as TOTAL_FORECAST_HOURS, 
   ROUND(SUM(FORECAST_REVENUE)::numeric, 2) as TOTAL_FORECAST_REVENUE,
   ROUND(SUM(case when type = 'Billed' then FORECAST_REVENUE else 0 end)::numeric, 2) AS "Baseline Spend to Date",
-  ROUND((SUM(ACTUAL_REVENUE) - P.BASE_BUDGET)::numeric, 2) AS DIFFERENCE,
-  ROUND((SUM(ACTUAL_REVENUE) / P.BASE_BUDGET*100)::numeric, 2) AS PCT_DIFFERENCE
+  ROUND((SUM(FORECAST_REVENUE) - P.BASE_BUDGET)::numeric, 2) AS BASELINE_DIFFERENCE,
+  ROUND((SUM(FORECAST_REVENUE) / P.BASE_BUDGET*100)::numeric, 2) AS BASELINE_PCT_DIFFERENCE
 FROM BIG_QUERY BQ
 JOIN PROJECT P ON (BQ.PROJECT_ID = P.ID)
 GROUP BY project_id, project_name, P,START_DATE, P.END_DATE, P.BASE_BUDGET
 ORDER BY PROJECT_NAME;
 
 
+
 ----------------------------------------------------------------------------------------
 --
 -- Project Actuals - Merged view of actual and baseline hours by client/project/person/day
 --
-
 select * from big_query where project_id = 12;
 
 ----------------------------------------------------------------------------------------
 --
 -- Budget Trend Chart - Monthly accumulated revenue for a project
 --
-
 SELECT 
   month, 
   sum(actual) OVER (ORDER BY month) AS actual, 
@@ -57,7 +58,6 @@ from
 --
 -- Project Resource Plan (Before crosstab)
 --
-
 SELECT Week, PERSON_NAME, SUM(ACTUAL_HOURS)
 from BIG_QUERY BQ
 WHERE PROJECT_ID = 11
@@ -84,7 +84,6 @@ AS (
 --
 -- Monthly Revenue - Actual/Projected revenue for a project
 --
-
 select 
   month, 
   sum(actual_revenue) as "Actual", 
@@ -98,7 +97,6 @@ order by month;
 --
 -- Project Resource Spend - Resource spend to date vs baseline
 --
-
 select 
   person_name, 
   round(sum(actual_hours)::numeric, 1) as "Actual",
@@ -112,7 +110,6 @@ order by person_name;
 --
 -- Person/Role Billed vs Unbilled - Billed hours to date vs remaining hours
 --
-
 select 
   person_name, 
   role,
@@ -127,7 +124,6 @@ order by person_name, role;
 --
 -- Global Resource Tracking - Weekly total hours by resource
 --
-
 select 
   week,
   person_name, 
