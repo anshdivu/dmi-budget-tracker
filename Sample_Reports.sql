@@ -26,8 +26,6 @@ JOIN PROJECT P ON (BQ.PROJECT_ID = P.ID)
 GROUP BY project_id, project_name, P,START_DATE, P.END_DATE, P.BASE_BUDGET
 ORDER BY PROJECT_NAME;
 
-
-
 ----------------------------------------------------------------------------------------
 --
 -- Project Actuals - Merged view of actual and baseline hours by client/project/person/day
@@ -132,3 +130,22 @@ from big_query
 group by week, person_name
 order by week, person_name;
 
+
+----------------------------------------------------------------------------------------
+--
+-- Upcoming PTO - Shows PTO for projects (only future PTO)
+--
+SELECT DISTINCT
+  p.name AS project_name,
+  p.id AS project_id,
+  person.name AS person_name,
+  person.id AS person_id,
+  pto.descr,
+  pto.start_date,
+  pto.end_date
+ FROM person
+   JOIN person_pto pto ON person.id = pto.person_id
+   JOIN project_person pp ON person.id = pp.person_id
+   JOIN project p ON p.id = pp.project_id
+WHERE pto.start_date > now()
+ORDER BY p.id, pto.start_date;
