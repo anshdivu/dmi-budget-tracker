@@ -5,7 +5,6 @@
 --
 -- Project Budget Status - Current budget information for all projects (or one if you pick a project_id)
 --
-
 SELECT 
   project_id,
   project_name, 
@@ -13,15 +12,18 @@ SELECT
   P.START_DATE,
   P.END_DATE,
   ROUND(SUM(ACTUAL_HOURS)::numeric, 2) as TOTAL_ACTUAL_HOURS, 
-  ROUND(SUM(ACTUAL_REVENUE)::numeric, 2) AS TOTAL_ACTUAL_REVENUE, 
+  ROUND(SUM(ACTUAL_REVENUE)::numeric, 2) AS TOTAL_ACTUAL_REVENUE,
+  ROUND(SUM(case when type = 'Billed' then ACTUAL_REVENUE else 0 end)::numeric, 2) AS "Actual Spend to Date",
   ROUND(SUM(FORECAST_HOURS)::numeric, 2) as TOTAL_FORECAST_HOURS, 
   ROUND(SUM(FORECAST_REVENUE)::numeric, 2) as TOTAL_FORECAST_REVENUE,
+  ROUND(SUM(case when type = 'Billed' then FORECAST_REVENUE else 0 end)::numeric, 2) AS "Baseline Spend to Date",
   ROUND((SUM(ACTUAL_REVENUE) - P.BASE_BUDGET)::numeric, 2) AS DIFFERENCE,
   ROUND((SUM(ACTUAL_REVENUE) / P.BASE_BUDGET*100)::numeric, 2) AS PCT_DIFFERENCE
 FROM BIG_QUERY BQ
 JOIN PROJECT P ON (BQ.PROJECT_ID = P.ID)
 GROUP BY project_id, project_name, P,START_DATE, P.END_DATE, P.BASE_BUDGET
 ORDER BY PROJECT_NAME;
+
 
 ----------------------------------------------------------------------------------------
 --
