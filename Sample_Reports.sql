@@ -108,6 +108,21 @@ order by person_name;
 
 ----------------------------------------------------------------------------------------
 --
+-- Person/Role Billed vs Unbilled - Billed hours to date vs remaining hours
+--
+
+select 
+  person_name, 
+  role,
+  round(sum(case when type = 'Billed' then actual_hours else 0 end)::numeric, 1) as "Billed",
+  round(sum(case when type = 'Unbilled' then actual_hours else 0 end)::numeric, 1) as "Unbilled"
+from big_query
+where project_id = 12
+group by person_name, role
+order by person_name, role;
+
+----------------------------------------------------------------------------------------
+--
 -- Global Resource Tracking - Weekly total hours by resource
 --
 
