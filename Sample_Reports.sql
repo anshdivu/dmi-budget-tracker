@@ -149,3 +149,38 @@ SELECT DISTINCT
    JOIN project p ON p.id = pp.project_id
 WHERE pto.start_date > now()
 ORDER BY p.id, pto.start_date;
+
+----------------------------------------------------------------------------------------
+--
+-- SOW Comparison Report - Compares forecasted hours against SOW by role
+--
+SELECT 
+  T.ROLE, 
+  T.ACTUAL_HOURS AS FORECASTED_HOURS, 
+  R.SOW_HOURS, 
+  T.ACTUAL_HOURS - R.SOW_HOURS AS HOURS_DIFFERENCE,
+  T.ACTUAL_REVENUE as FORECASTED_REVENUE,
+  R.SOW_REVENUE,
+  T.ACTUAL_REVENUE - R.SOW_REVENUE AS REVENUE_DIFFERENCE
+FROM (
+  select bq.role, round(sum(actual_hours)::numeric, 1) as ACTUAL_HOURS, round(sum(actual_revenue)::numeric, 1) as ACTUAL_REVENUE
+  from big_query bq
+  where bq.project_id = 12
+  group by bq.role) t,
+  (SELECT ROLE, sum(SOW_HOURS) AS SOW_HOURS, sum(SOW_HOURS * BILL_RATE) AS SOW_REVENUE
+  FROM PROJECT_PERSON
+  WHERE PROJECT_ID = 12
+  GROUP BY ROLE) R
+WHERE T.ROLE = R.ROLE
+ORDER BY T.ROLE;
+
+----------------------------------------------------------------------------------------
+--
+-- Global Revenue by Practice - Revenue generated across all projects by practice area
+--
+SELECT 
+  practice_name, round(sum(actual_revenue)::numeric, 1) as actual_hours
+from
+  big_query
+group by practice_name
+order by practice_name;
